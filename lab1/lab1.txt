@@ -1,0 +1,77 @@
+5：进程的软中断环境的使用
+kill和signal
+SIGUSR1 用户自定义信号 默认处理：进程终止
+SIGUSR2 用户自定义信号 默认处理：进程终止
+
+void（* signal（int sig，void（* func）（int）））（int）;
+参数func指定程序可以处理信号的三种方式之一：
+
+    默认处理（SIG_DFL）：信号由该特定信号的默认动作处理。
+    忽略信号（SIG_IGN）：忽略信号，即使没有意义，代码执行仍将继续。
+    函数处理程序：定义一个特定的函数来处理信号。
+参数
+
+SIG
+    设置处理功能的信号值。以下宏常量表达式标识标准信号值：
+
+    宏	信号
+    SIGABRT 	（信号中止）异常终止，例如由...发起 退出 功能。
+    SIGFPE 	（信号浮点异常）错误的算术运算，例如零分频或导致溢出的运算（不一定是浮点运算）。
+    SIGILL 	（信号非法指令）无效的功能图像，例如非法指令。这通常是由于代码中的损坏或尝试执行数据。
+    SIGINT 	（信号中断）交互式注意信号。通常由应用程序用户生成。
+    SIGSEGV 	（信号分段违规）对存储的无效访问：当程序试图在已分配的内存之外读取或写入时。
+    SIGTERM 	（信号终止）发送到程序的终止请求。
+
+    每个库实现可以提供可以与此函数一起使用的附加信号值宏常量。
+
+    请注意，并非所有运行环境都需要生成自动信号，即使在上述特定情况下也是如此，尽管所有运行环境都必须通过显式调用生成的信号来生成提高 功能。
+FUNC
+    指向函数的指针。这可以是程序员定义的函数，也可以是以下预定义函数之一：
+
+    SIG_DFL 	默认处理：信号由该特定信号的默认操作处理。
+    SIG_IGN 	忽略信号：忽略信号。
+
+学习了Kill和signal，接下来学习fork（）
+学习了创建子进程
+接下来学习创建管道
+管道是半双工的 数据只能单向流动 双方通信需要建立两个管道
+管道只能用于父子进程或兄弟进程之间
+管道对于管道两端的进程而言就是一个文件。并单独构成一种文件系统，存在于内存中
+写管道的内容添加在管道缓冲区的末尾，读管道则从缓冲区头部读出
+while(read(fd[0], buf,sizeof(buf)-1) > 0 )
+c语言没有sprintf_s 试试sprintf 用于格式化字符打印
+
+set follow-fork-mode child
+
+in "Settings -> Comiler and debugger ... -> Debugger settings -> Debugger initializations commands".
+
+代码有一个问题 子进程应该在父进程中创建 而不是父子代码结束的时候创建 那是两个进程的公有代码段
+codeblocks傻逼软件没救了 还是用gdb吧
+follow-fork-mode 要调试的进程
+detach-on-fork 另外的进程是否继续
+首先要编译好程序 然后用gdb运行 再用b 行号设置断点 r是运行
+p变量 可以显示变量内容
+l 1,71 显示前71行
+bt 查看当前的堆栈信息
+info inferiors 查看当前进程信息
+
+set follow-fork-mode parent
+set detach-on-fork off
+b 1
+b 28
+b 46
+b 54
+
+inferior <infer number>
+detach分离
+ps -ef | grep ldw 
+./a.out &
+3个方法 方法1 attach给进程 加入代码使沉睡 沉睡其间获得进程id 就可以调试了
+方法2  follow-fork-mode 
+detach-on-fork 
+方法3 gdb-wrapper
+info br显示断点
+d 1删除1号断点
+软中断信号就是 主进程收到ctrl c时要向别的进程发送信号sig1和sig2
+忽略信号就是子进程1和子进程2收到sigint时不中断 同时收到sig1信号和sig2信号时中断
+
