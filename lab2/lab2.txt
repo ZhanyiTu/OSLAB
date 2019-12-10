@@ -1,0 +1,16 @@
+连不上github的原因是没联网，但是虚拟机真的是卡爆了
+真想试试双系统，这速度真是慢爆了
+还是要学会忍受
+int semget(key_t key,int nsems,int semflg);信号灯创建
+key是一个常数 ，为IPC_PRIVATE表明由系统选用一个关键字；
+nsems创建的信号灯个数，信号灯编号为0到nsems-1；
+semflg创建的权限标志，如IPC_CREAT|0666；
+   /*IPC_CREAT表示不存在则创建*/
+成功时返回信号灯的ID ，否则为-1。 
+struct student stu1;
+stu1.id = 1
+semop()功能：用户改变信号量的值。也就是使用资源还是释放资源使用权。
+信号灯 用来分配资源的？
+信号灯通过p v原语进行赋初值
+看代码之前还是要看下原理课本
+信号灯编号从0到seqnum-1
