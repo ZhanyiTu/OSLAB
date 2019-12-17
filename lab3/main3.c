@@ -1,16 +1,7 @@
 //
 // Created by tzy on 2019/12/17.
 //
-/*主程序框架
-main()
-{	创建KEY的共享内存组；
-    创建KEY的信号灯；
-    信号灯赋初值；
-    创建两个子进程readbuf、writebuf;
-    等待两个子进程运行结束；
-    删除信号灯；
-    删除共享内存组；
-}
+/*
 readbuf负责读、writebuf负责写，如何定义？
 readbuf
 main() {
@@ -39,7 +30,18 @@ main() {
         移动环形缓冲区指针；
         信号灯V操作；
         if  (数据结束)  break;
-    } }*/
+    } }
+主程序框架
+main()
+{	创建KEY的共享内存组；
+    创建KEY的信号灯；
+    信号灯赋初值；
+    创建两个子进程readbuf、writebuf;
+    等待两个子进程运行结束；
+    删除信号灯；
+    删除共享内存组；
+}
+    */
 #include <sys/shm.h>
 #include <sys/ipc.h>
 #include <stdio.h>
@@ -47,9 +49,28 @@ main() {
 #define  SHMKEY  75
 #include <unistd.h>
 #include <wait.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <sys/sem.h>
+union semun{
+    short val;
+    struct semid_ds* buf;
+    unsigned short* array;
 
+}arg;
+int  shmid,i;   int  *addr;
+int id1;
 int main(){
-    printf("hello\n");
+    shmid=shmget(SHMKEY,1024,0666|IPC_CREAT);
+/*创建共享存储区*/
+    addr=shmat(shmid,0,0);
+/*获取首地址*/
+    id1 = semget(IPC_PRIVATE, 2, IPC_CREAT|0666 );//信号灯创建，3个参数 问题就出在这个参数上，参数写错了所以都错了
+
+    arg.val = 1;//信号灯赋初值
+    semctl(id1, 0, SETVAL, arg);
+    arg.val = 0;
+    semctl(id1, 1, SETVAL, arg);
 }
 
 
