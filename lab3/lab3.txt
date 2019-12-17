@@ -7,3 +7,5 @@ i = i+1 mod N;
 环形缓冲
 我要分配多大的数组？
 目标是文件的复制。所以就先随便复制一个N = 5好了
+FILE *fopen(char *filename, char *mode); C语言打开文件
+FILE *fp = fopen("demo.txt", "r");
