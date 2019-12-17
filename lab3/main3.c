@@ -40,6 +40,19 @@ main() {
         信号灯V操作；
         if  (数据结束)  break;
     } }*/
+#include <sys/shm.h>
+#include <sys/ipc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#define  SHMKEY  75
+#include <unistd.h>
+#include <wait.h>
+
+int main(){
+    printf("hello\n");
+}
+
+
 /*
 #include <sys/shm.h>
 #include <sys/ipc.h>
