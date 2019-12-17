@@ -1,0 +1,34 @@
+Suspect Test Reasoning:
+Dynamax is the latest mechanic introduced and is by far the most controversial one yet. Dynamaxing a Pokemon last for three turns, immediately doubling their current HP and granting them powerful Max Moves, which, for the most part, are not only stronger than the base moves but also have great secondary effects, such as raising stats and setting terrain. Dynamaxed Pokemon are also immune to being flinched, being phased out, fainting to Destiny Bond, all weight related moves, the effects of Encore, the effects of Disable, and the move lock from Choiced items (although the boosts from the items disappear while Dynamaxed).
+
+Over the past three weeks, Dynamax has been at the forefront of the metagame and been very centralising. Due to the fact any Pokemon can Dynamax, it makes Dynamaxing very unpredictable and difficult to deal with, putting a great strain on teambuilding and almost mandating the usage of certain defensive Pokemon. There are also an extremely high amount of Pokemon which can often utilize Dynamax, in one way or another. This has meant that there are more than just a handful of abusers, which would need to be suspected. Here are the most notable examples:
+
+Setup Sweepers:
+Rufflet (Rufflet cannot miss with Dynamax and Max Airstream makes up for its lack of Speed.)
+Galarian Mr Mime (Galarian Mr Mime is relatively frail but Dynamax makes it difficult to revenge kill due to setting up Psychic Terrain after using Max Mindstorm.)
+Klang (Dynamax increases Klang’s already solid bulk and can turn into a nasty physically defensive wall as well, thanks to Max Steelspike)
+Gurdurr (Dynamax makes Gurdurr even bulkier than it is allowing it to easily muscle through opposing Pokemon after a Bulk Up or two.)
+Drakloak (With an already solid Speed stat, the combination of Dragon Dance and Dynamax make it a significant offensive threat, which is difficult to manage and almost impossible to revenge kill.)
+Galarian Farfetch’d (Galarian Farfetch’d mediocre Speed is fixed with Max Airstream as well as being harder to revenge kill once it’s setup)
+Fraxure (Whilst slower and more powerful than Drakloak, it functions very similarly as a sweeper. Dynamax fixes Fraxure’s average bulk issues and makes it a more reliable Dragon Dance sweeper.)
+Weather Based Sweepers:
+Gloom (Gloom sets up with Growth and with Dynamax break through teams with ease with a spammable 140 BP Max Overgrowth under Sun.)
+Palpitoad (Dynamax allows Palpitoad to set up rain with Max Geyser which synergises especially well with its ability Swift Swim. This overcomes the problem of Palpitoad’s mediocre Speed and allows it to use its wide coverage to its fullest potential.)
+Choice Item Users:
+Haunter (Choice Scarf is very versatile and allows Haunter to act as both a revenge killer and a late game sweeper due to Max Ooze boosting its Special Attack stat.)
+Sneasel (With Dynamax, Sneasel becomes one of the more reliable revenge killers while also able to gain boosts from a Max Knuckle to be an effective cleaner. Sneasel also has the option to run a Swords Dance set and Dynamax makes it harder for Sneasel to revenge killed by super effective priority moves, despite being relatively frail.)
+Bulky Attackers:
+Machoke (Dynamax allows Machoke to eat hits even better and along with Guts, Knock Off and Earthquake allows it to deal with the most common Dynamax blanket checks in Galarian Corsola and Mareanie.
+Piloswine (With base 100 HP and 100 Attack, Dynamax synergises extremely well with Piloswine as its able to throw out empowered unresisted dual STABs whilst also being extremely bulky.)
+Dynamaxing one of the aforementioned threats, however, does not necessarily result in an autowin occuring. Galarian Corsola or Mareanie can be found on the majority of teams as a response to all the Dynamaxed setup sweepers as they both carry Haze. Other ways to counteract Dynamax is to Dynamax a Pokemon to tank a hit and fire back, using Dynamax on a revenge killer or switching into a bulky Pokemon, which is able to resist or is immune to the opposing Pokemon’s attacks. Dynamaxed Pokemon are by no means unwallable with bulkier Pokemon normally able to respond against the common offensive usage of Dynamax.
+
+Dynamax is also the main mechanic of this generation and it should be considered whether deviating from the main games by this degree is worth doing. Whilst we will not be focusing on this aspect in much depth in this thread, be aware that voting to ban Dynamax would remove a core aspect from the metagame.
+
+Overall, Dynamax has been a hot topic since the start of Generation 8 and impact on the metagame cannot be understated. Dynamax contains various amazing aspects and banning it may result in healthier meta to develop. Dynamax’s effect on both teambuilding and in-battle is why the Council deems the mechanic suspect-worthy.
+
+Suspect Test Information:
+The voting requirements are a minimum GXE of 78 with at least 35 games played.
+For this suspect test, a new account starting with NFED, such as “NFED Crystalites” must be used to qualify, as we will be using the NFE Ladder. The suspect will end in around 2 weeks time, on the 21st December 11:59 EST, and then we will put up the voting thread in the Blind Voting subforum.
+
+This thread will also be used for posting your voter identification screenshot. Make sure when doing this, you show your alt has met these requirements, as well as proof that the alt belongs to you. When uploading large images, please use a HIDE tag.
+Code:

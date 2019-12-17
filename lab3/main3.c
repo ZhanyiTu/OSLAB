@@ -100,7 +100,7 @@ int main(){
     if( p1 == 0){
         //子进程1 readbuf
         addr=shmat(shmid,0,0);//获取分享的空间
-        //打开源文件
+        FILE *fp1 = fopen("~/lab/lab3/test.txt", "r");//打开源文件
         while(1){
             P(id1, 0);
             V(id1, 1);
