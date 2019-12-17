@@ -14,20 +14,7 @@ main()
     删除共享内存组；
 }
 
-writebuf
-main() {
-    获取KEY的共享内存组；
-    建立数组形式环形缓冲；
-    获取KEY的信号灯；
-    创建目标文件；
-    while (1) {
-        信号灯P操作；
-        取缓冲区数据；
-        写入文件； *//*有效数据或结束*//*
-        移动环形缓冲区指针；
-        信号灯V操作；
-        if  (数据结束)  break;
-    } }
+
 readbuf
 main() {
     获取KEY的共享内存组；
@@ -42,6 +29,20 @@ main() {
         信号灯V操作；
         if  (文件结束)  break;
     }}
+    writebuf
+main() {
+    获取KEY的共享内存组；
+    建立数组形式环形缓冲；
+    获取KEY的信号灯；
+    创建目标文件；
+    while (1) {
+        信号灯P操作；
+        取缓冲区数据；
+        写入文件； *//*有效数据或结束*//*
+        移动环形缓冲区指针；
+        信号灯V操作；
+        if  (数据结束)  break;
+    } }
     */
 #include <sys/shm.h>
 #include <sys/ipc.h>
@@ -63,7 +64,7 @@ union semun{
 
 }arg;
 char *buf[N];//N = 5
-int i;// = (i + 1)mod N?
+int i = 0;// = (i + 1)mod N?
 int shmid;
 //int  shmid,i;
 int  *addr;
@@ -101,9 +102,16 @@ int main(){
         //子进程1 readbuf
         addr=shmat(shmid,0,0);//获取分享的空间
         FILE *fp1 = fopen("~/lab/lab3/test.txt", "r");//打开源文件
+        int flen = ftell(fp1);
+        int buflen = flen/N + 1;
         while(1){
             P(id1, 0);
+            int size = fread(buf[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
+            i = (i + 1) % N;
             V(id1, 1);
+            if(size != buflen){
+                break;
+            }
         }
 
     }

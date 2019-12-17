@@ -9,3 +9,11 @@ i = i+1 mod N;
 目标是文件的复制。所以就先随便复制一个N = 5好了
 FILE *fopen(char *filename, char *mode); C语言打开文件
 FILE *fp = fopen("demo.txt", "r");
+fread可以读取文件
+从给定输入流stream读取最多count个对象到数组buffer中（相当于以对每个对象调用size次fgetc），把buffer当作unsigned char数组并顺序保存结果。流的文件位置指示器前进读取的字节数。
+若出现错误，则流的文件位置指示器的位置不确定。若没有完整地读入最后一个元素，则其值不确定。
+参数
+buffer	指向要读取的数组中首个对象的指针
+size	每个对象的大小（单位是字节）
+count	要读取的对象个数
+stream	输入流
