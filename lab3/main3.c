@@ -40,6 +40,7 @@ main() {
         信号灯V操作；
         if  (数据结束)  break;
     } }*/
+/*
 #include <sys/shm.h>
 #include <sys/ipc.h>
 #include <stdio.h>
@@ -50,21 +51,28 @@ main() {
 int  shmid,i;   int  *addr;
 void  server( )
 {
-    shmid=shmget(SHMKEY,1024,0666|IPC_CREAT); /*创建共享存储区*/
-    addr=shmat(shmid,0,0);        /*获取首地址*/
+    shmid=shmget(SHMKEY,1024,0666|IPC_CREAT); */
+/*创建共享存储区*//*
+
+    addr=shmat(shmid,0,0);        */
+/*获取首地址*//*
+
     do
     {
         *addr=-1;
         while (*addr==-1);
         printf("(server) received\n");
     }while (*addr);
-    shmctl(shmid,IPC_RMID,0);     /*撤消共  享存储区，归还资源*/
+    shmctl(shmid,IPC_RMID,0);     */
+/*撤消共  享存储区，归还资源*//*
+
     exit(0);
 }
 
 
 void  client( ){
-    shmid=shmget(SHMKEY,1024,0666);     addr=shmat(shmid,0,0);
+    shmid=shmget(SHMKEY,1024,0666);
+    addr=shmat(shmid,0,0);//获取分享的空间
     for (i=9;i>=0;i--)
     {  while (*addr!=-1);
         printf("(client) sent\n");
@@ -80,4 +88,4 @@ main( ){
     if (!i) client( );
     wait(0);
     wait(0);
-}
+}*/
