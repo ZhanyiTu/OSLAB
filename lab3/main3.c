@@ -40,7 +40,44 @@ main() {
         信号灯V操作；
         if  (数据结束)  break;
     } }*/
+#include <sys/shm.h>
+#include <sys/ipc.h>
 #include <stdio.h>
-int main(){
-    printf("hello");
+#include <stdlib.h>
+#define  SHMKEY  75
+#include <unistd.h>
+#include <wait.h>
+int  shmid,i;   int  *addr;
+void  server( )
+{
+    shmid=shmget(SHMKEY,1024,0666|IPC_CREAT); /*创建共享存储区*/
+    addr=shmat(shmid,0,0);        /*获取首地址*/
+    do
+    {
+        *addr=-1;
+        while (*addr==-1);
+        printf("(server) received\n");
+    }while (*addr);
+    shmctl(shmid,IPC_RMID,0);     /*撤消共  享存储区，归还资源*/
+    exit(0);
+}
+
+
+void  client( ){
+    shmid=shmget(SHMKEY,1024,0666);     addr=shmat(shmid,0,0);
+    for (i=9;i>=0;i--)
+    {  while (*addr!=-1);
+        printf("(client) sent\n");
+        *addr=i;
+    }
+    exit(0);
+}
+main( ){
+    while ((i=fork( ))==-1);
+    if (!i) server( );
+    system("ipcs  -m");
+    while ((i=fork( ))==-1);
+    if (!i) client( );
+    wait(0);
+    wait(0);
 }
