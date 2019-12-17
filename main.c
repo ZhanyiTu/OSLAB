@@ -30,6 +30,12 @@ int sum = 0;
 subp2负责计算，如何定义？
  *
  */
+union semun{
+    short val;
+    struct semid_ds* buf;
+    unsigned short* array;
+
+}arg;
 void P(int semid,int index)
 {	   struct sembuf sem;
     sem.sem_num = index;
@@ -46,21 +52,18 @@ void V(int semid,int index)
     semop(semid,&sem,1);
 }
 void* thread_fun1(){
-    while(1){
+    for(int i = 1; i <= 100; i++) {
+
         P(id1, 0);
         a++;
-        if(a == 101)
-            return;
         V(id1, 1);
     }
 
 }
 
 void* thread_fun2(){
-    while(1){
+    for(int i = 1; i<= 100; i++){
         P(id1, 1);
-        if(a == 101)
-            return;
         sum = sum + a;
         printf("%d\t", sum);
         V(id1, 0);
@@ -69,9 +72,11 @@ void* thread_fun2(){
 }
 
 int main() {
-    id1 = semget(IPC_PRIVATE, 2, IPC_CREAT );//信号灯创建，3个参数
-    semctl(id1, 0, SETVAL, 1);
-    semctl(id1, 1, SETVAL, 0);
+    id1 = semget(IPC_PRIVATE, 2, IPC_CREAT|0666 );//信号灯创建，3个参数 问题就出在这个参数上，参数写错了所以都错了
+    arg.val = 1;
+    semctl(id1, 0, SETVAL, arg);
+    arg.val = 0;
+    semctl(id1, 1, SETVAL, arg);
     pthread_t t1, t2;
     pthread_create(&t1, NULL, thread_fun1, NULL);
     pthread_create(&t2, NULL, thread_fun2, NULL);
