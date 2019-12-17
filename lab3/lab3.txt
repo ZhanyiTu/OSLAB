@@ -20,3 +20,4 @@ stream	输入流
 
 errno是一个全局变量 #include<errno.h> 有问题时直接输出就行了
 errno22 无效的参数
+我要对共享的内存做什么？ 先写再读

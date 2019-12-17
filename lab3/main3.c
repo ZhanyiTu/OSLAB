@@ -66,7 +66,7 @@ union semun{
 }arg;
 char *buf[N];//N = 5
 int i = 0;// = (i + 1)mod N?
-int shmid;
+int shmid[N];
 //int  shmid,i;
 int  *addr;
 int id1;
@@ -90,12 +90,9 @@ int main(){
     int status1, status2;
     shmid=shmget(SHMKEY,1024,0666|IPC_CREAT);
 //创建共享存储区
-    if((addr=shmat(shmid,buf,0)) == -1){
-        printf("create share mat error!\n");
-        printf("errno is: %d\n",errno);
-    }
 
-//获取首地址
+
+
     id1 = semget(IPC_PRIVATE, 2, IPC_CREAT|0666 );//信号灯创建，3个参数 问题就出在这个参数上，参数写错了所以都错了
 
     arg.val = 1;//信号灯赋初值
@@ -105,7 +102,7 @@ int main(){
     p1 = fork();
     if( p1 == 0){
         //子进程1 readbuf
-        addr=shmat(shmid,0,0);//获取分享的空间
+        int *addr1[N] = shmat(shmid,0,0);//获取分享的空间
         FILE *fp1 = fopen("~/lab/lab3/test.txt", "r");//打开源文件
         int flen = ftell(fp1);
         int buflen = flen/N + 1;
