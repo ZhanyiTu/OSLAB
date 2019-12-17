@@ -55,6 +55,7 @@ main() {
 #include <sys/types.h>
 #include <sys/sem.h>
 #define N 5 //把缓冲区分成5块
+#include<errno.h>
 pid_t p1;//创建子进程1 2
 pid_t p2;
 union semun{
@@ -89,7 +90,11 @@ int main(){
     int status1, status2;
     shmid=shmget(SHMKEY,1024,0666|IPC_CREAT);
 //创建共享存储区
-    addr=shmat(shmid,0,0);
+    if((addr=shmat(shmid,buf,0)) == -1){
+        printf("create share mat error!\n");
+        printf("errno is: %d\n",errno);
+    }
+
 //获取首地址
     id1 = semget(IPC_PRIVATE, 2, IPC_CREAT|0666 );//信号灯创建，3个参数 问题就出在这个参数上，参数写错了所以都错了
 
