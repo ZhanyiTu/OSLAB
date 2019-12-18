@@ -74,6 +74,7 @@ char *buf[N];//N = 5
 int  *addr;
 int id1;
 int flen, buflen = 1024;
+
 void P(int semid,int index)
 {	   struct sembuf sem;
     sem.sem_num = index;
@@ -93,10 +94,11 @@ int main(){
     pid_t t1;
     int status1, status2;
     int shmid[N];
-    system("ipcs  -m");
+    int shmid_size;//最后一块文件的大小需要知道
     for(int j = 0; j < N; j++){
         shmid[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
     }
+    shmid_size = shmget(SHMKEY + N,20,0666|IPC_CREAT);
     system("ipcs  -m");
 
 
@@ -115,10 +117,13 @@ int main(){
         //子进程1 readbuf 把文件中的数据读到共享空间
         int *addr1[N];
         int shmid1[N];
+        int *size;
         for(int j = 0; j < N; j++){
             shmid1[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
             addr1[j] = shmat(shmid1[j],0,0);//获取分享的空间
         }
+        int shmid_size1 = shmget(SHMKEY + N,20,0666|IPC_CREAT);
+        size = shmat(shmid_size1,0,0);//获取分享的空间
         FILE *fp1 = fopen("/home/tzy/lab/lab3/test.txt", "rb");//打开源文件
         if(NULL == fp1){
             printf("%d\n", errno);
@@ -126,13 +131,12 @@ int main(){
         //flen = ftell(fp1);
         buflen = 1024;
         int i = 0;
-        int size;
         while(1){
             P(id1, 0);
-            size = fread(addr1[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
+            (*size) = fread(addr1[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
             i = (i + 1) % N;
             V(id1, 1);
-            if(size != buflen){
+            if((*size) != buflen){
                 break;
             }
         }
@@ -144,23 +148,25 @@ int main(){
             //子进程2 writebuf 把共享空间中的数据写进文件
             int *addr2[N];
             int shmid2[N];
+            int *size;
+            int shmid_size2;
             for(int j = 0; j < N; j++){
                 shmid2[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
                 addr2[j] = shmat(shmid2[j],0,0);//获取分享的空间
             }
+            shmid_size2 = shmget(SHMKEY + N,20,0666|IPC_CREAT);
+            size = shmat(shmid_size2,0,0);
             FILE* fp2 = fopen("/home/tzy/lab/lab3/test_out.txt", "wb");//"w" = “wt”新建一个文本文件，已存在的文件将内容清空，只允许写
             if(NULL == fp2){
                 printf("%d\n", errno);
             }
             int k = 0;
-            int size;
             while(1){
                 P(id1, 1);//阻塞
-                size = fwrite(addr2[k], 1, buflen, fp2);
-                printf("%d%s\n", k,addr2[k]);
+                int size2 = fwrite(addr2[k], 1, (*size), fp2);
                 k = (k+1) % N;
                 V(id1, 0);
-                if(size != buflen){
+                if(size2 != buflen){
                     break;
                 }
             }
