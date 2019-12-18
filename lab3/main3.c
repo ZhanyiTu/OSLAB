@@ -56,6 +56,8 @@ main() {
 #include <sys/sem.h>
 #define N 5 //把缓冲区分成5块
 #include<errno.h>
+
+#include <string.h>
 pid_t p1;//创建子进程1 2
 pid_t p2;
 union semun{
@@ -155,6 +157,7 @@ int main(){
             while(1){
                 P(id1, 1);//阻塞
                 size = fwrite(addr2[k], 1, buflen, fp2);
+                printf("%d%s\n", k,addr2[k]);
                 k = (k+1) % N;
                 V(id1, 0);
                 if(size != buflen){
