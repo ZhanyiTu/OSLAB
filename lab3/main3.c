@@ -70,6 +70,7 @@ int shmid[N];
 //int  shmid,i;
 int  *addr;
 int id1;
+int flen, buflen;
 void P(int semid,int index)
 {	   struct sembuf sem;
     sem.sem_num = index;
@@ -111,8 +112,8 @@ int main(){
             addr1[j] = shmat(shmid[j],0,0);//获取分享的空间
         }
         FILE *fp1 = fopen("~/lab/lab3/test.txt", "r");//打开源文件
-        int flen = ftell(fp1);
-        int buflen = flen/N + 1;
+        flen = ftell(fp1);
+        buflen = flen/N + 1;
         while(1){
             P(id1, 0);
             int size = fread(addr1[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
@@ -132,10 +133,15 @@ int main(){
             for(int j = 0; j < N; j++){
                 addr2[j] = shmat(shmid[j],0,0);//获取分享的空间
             }
+            FILE* fp2 = fopen("~/lab/lab3/test_out.txt", "r");
             while(1){
                 P(id1, 1);
-
+                int k = (i-1) % N;
+                int size = fwrite(addr2, 1, buflen, fp2);
                 V(id1, 0);
+                if(size != buflen){
+                    break;
+                }
             }
         }
         else{
