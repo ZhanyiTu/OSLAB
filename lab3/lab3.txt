@@ -24,3 +24,25 @@ errno22 无效的参数
 P V操作的意义是什么？ 加快速度
 
 任务是从源文件复制到目标文件
+多个进程写成多个文件方便调试
+errno2 No such file or directory
+~ = /home/tzy
+有两个子进程 但是主进程 并不在最前面
+不对。最前面的就是主进程
+我好像没有进行信号灯处理?
+echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+sudo service procps restart
+居然可以调试多线程？？？？
+/etc/sysctl.d/10-ptrace.conf
+detach是释放命令 进程会自由运行 关键是子进程没有设置GDB模式
+set detach-on-fork off
+set follow-fork-mode child
+调试成功了。。又累又开心
+ftell使用错误
+函数 ftell 用于得到文件位置指针当前位置相对于文件首的偏移字节数。在随机方式存取文件时，由于文件位置频繁的前后移动，程序不容易确定文件的当前位置。
+好像是重复执行的意思。。
+子进程2阻塞在P操作 说明子进程1没有执行V操作
+子进程1第二次就阻塞了。
+大概了理解了主进程在什么地方
+也就是说没有跑完子进程1 程序就结束了
+另外一个问题 就是 fread再写入一个写满了的BUF的时候就不会写了

@@ -65,12 +65,13 @@ union semun{
 
 }arg;
 char *buf[N];//N = 5
-int i = 0;// = (i + 1)mod N?
-int shmid[N];
+//int i = 0;// = (i + 1)mod N?
+
+
 //int  shmid,i;
 int  *addr;
 int id1;
-int flen, buflen;
+int flen, buflen = 1024;
 void P(int semid,int index)
 {	   struct sembuf sem;
     sem.sem_num = index;
@@ -89,9 +90,12 @@ void V(int semid,int index)
 int main(){
     pid_t t1;
     int status1, status2;
+    int shmid[N];
+    system("ipcs  -m");
     for(int j = 0; j < N; j++){
         shmid[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
     }
+    system("ipcs  -m");
 
 
 //创建共享存储区
@@ -108,15 +112,22 @@ int main(){
     if( p1 == 0){
         //子进程1 readbuf 把文件中的数据读到共享空间
         int *addr1[N];
+        int shmid1[N];
         for(int j = 0; j < N; j++){
-            addr1[j] = shmat(shmid[j],0,0);//获取分享的空间
+            shmid1[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
+            addr1[j] = shmat(shmid1[j],0,0);//获取分享的空间
         }
-        FILE *fp1 = fopen("~/lab/lab3/test.txt", "r");//打开源文件
-        flen = ftell(fp1);
-        buflen = flen/N + 1;
+        FILE *fp1 = fopen("/home/tzy/lab/lab3/test.txt", "rb");//打开源文件
+        if(NULL == fp1){
+            printf("%d\n", errno);
+        }
+        //flen = ftell(fp1);
+        buflen = 1024;
+        int i = 0;
+        int size;
         while(1){
             P(id1, 0);
-            int size = fread(addr1[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
+            size = fread(addr1[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
             i = (i + 1) % N;
             V(id1, 1);
             if(size != buflen){
@@ -130,27 +141,34 @@ int main(){
         if(p2 == 0){
             //子进程2 writebuf 把共享空间中的数据写进文件
             int *addr2[N];
+            int shmid2[N];
             for(int j = 0; j < N; j++){
-                addr2[j] = shmat(shmid[j],0,0);//获取分享的空间
+                shmid2[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
+                addr2[j] = shmat(shmid2[j],0,0);//获取分享的空间
             }
-            FILE* fp2 = fopen("~/lab/lab3/test_out.txt", "r");
+            FILE* fp2 = fopen("/home/tzy/lab/lab3/test_out.txt", "wb");//"w" = “wt”新建一个文本文件，已存在的文件将内容清空，只允许写
+            if(NULL == fp2){
+                printf("%d\n", errno);
+            }
+            int k = 0;
+            int size;
             while(1){
-                P(id1, 1);
-                int k = (i-1) % N;
-                int size = fwrite(addr2, 1, buflen, fp2);
+                P(id1, 1);//阻塞
+                size = fwrite(addr2[k], 1, buflen, fp2);
+                k = (k+1) % N;
                 V(id1, 0);
                 if(size != buflen){
                     break;
                 }
             }
         }
-        else{
-            //主进程
-            t1 = waitpid(p1, &status1, 0);//暂停目前进程的执行， 直到有信号来或者子进程结束 pid 是要等待的进程
-            t1 = waitpid(p2, &status2, 0);//暂停目前进程的执行， 直到有信号来或者子进程结束 pid 是要等待的进程
-            semctl(id1, 0, IPC_RMID, 1);
-            shmctl(shmid,IPC_RMID,0);
-        }
+
+    }
+    t1 = waitpid(p1, &status1, 0);//暂停目前进程的执行， 直到有信号来或者子进程结束 pid 是要等待的进程
+    t1 = waitpid(p2, &status2, 0);//暂停目前进程的执行， 直到有信号来或者子进程结束 pid 是要等待的进程
+    semctl(id1, 0, IPC_RMID, 1);
+    for(int i = 0; i < N; i++){
+        shmctl(shmid[i],IPC_RMID,0);
     }
 }
 
