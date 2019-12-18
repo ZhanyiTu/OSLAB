@@ -14,8 +14,7 @@ main()
     删除共享内存组；
 }
 
-
-readbuf
+    readbuf
 main() {
     获取KEY的共享内存组；
     建立数组形式环形缓冲；
@@ -29,6 +28,7 @@ main() {
         信号灯V操作；
         if  (文件结束)  break;
     }}
+
     writebuf
 main() {
     获取KEY的共享内存组；
@@ -88,7 +88,11 @@ void V(int semid,int index)
 int main(){
     pid_t t1;
     int status1, status2;
-    shmid=shmget(SHMKEY,1024,0666|IPC_CREAT);
+    for(int j = 0; j < N; j++){
+        shmid[j] = shmget(SHMKEY + j,1024,0666|IPC_CREAT);
+    }
+
+
 //创建共享存储区
 
 
@@ -101,14 +105,17 @@ int main(){
     semctl(id1, 1, SETVAL, arg);
     p1 = fork();
     if( p1 == 0){
-        //子进程1 readbuf
-        int *addr1[N] = shmat(shmid,0,0);//获取分享的空间
+        //子进程1 readbuf 把文件中的数据读到共享空间
+        int *addr1[N];
+        for(int j = 0; j < N; j++){
+            addr1[j] = shmat(shmid[j],0,0);//获取分享的空间
+        }
         FILE *fp1 = fopen("~/lab/lab3/test.txt", "r");//打开源文件
         int flen = ftell(fp1);
         int buflen = flen/N + 1;
         while(1){
             P(id1, 0);
-            int size = fread(buf[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
+            int size = fread(addr1[i],1,buflen,fp1); /* 一次性读取全部文件内容 *///读文件数据
             i = (i + 1) % N;
             V(id1, 1);
             if(size != buflen){
@@ -120,7 +127,16 @@ int main(){
     else{
         p2 = fork();
         if(p2 == 0){
-            //子进程2
+            //子进程2 writebuf 把共享空间中的数据写进文件
+            int *addr2[N];
+            for(int j = 0; j < N; j++){
+                addr2[j] = shmat(shmid[j],0,0);//获取分享的空间
+            }
+            while(1){
+                P(id1, 1);
+
+                V(id1, 0);
+            }
         }
         else{
             //主进程
